@@ -4,7 +4,7 @@ info:
   description: ""
   version: "1.0.0"
   title: "Chat app"
-host: "node-express-tst.azurewebsites.net"
+host: "chat-001-dev.azurewebsites.net"
 basePath: "/api/v1"
 tags:
 - name: "user"
