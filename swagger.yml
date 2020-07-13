@@ -4,12 +4,13 @@ info:
   description: ""
   version: "1.0.0"
   title: "Chat app"
-host: "localhost:30"
+host: "node-express-tst.azurewebsites.net"
 basePath: "/api/v1"
 tags:
 - name: "user"
 schemes:
 - "http"
+- "https"
 paths:
   /user:
     post:

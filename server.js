@@ -14,7 +14,7 @@ const user = require('./routes/user');
 const app = express();
 
 app.use(bodyParser.json());
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const server = http.createServer(app);
 const io = socketIo(server);

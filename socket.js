@@ -52,10 +52,10 @@ const socketServer = (io, server) => {
         });
     });
 
-    server.listen(process.env.PORT, () => {
-        console.log('Server is running at : ' + process.env.PORT)
-    });
-
+    const port = process.env.PORT || 1337;
+    server.listen(port);
+    console.log('running on ' + port)
+    
     const leaveRoom = (id) => {
         const user = users.removeUser(id);
         if (user) {
