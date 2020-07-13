@@ -9,7 +9,6 @@ basePath: "/api/v1"
 tags:
 - name: "user"
 schemes:
-- "http"
 - "https"
 paths:
   /user:
