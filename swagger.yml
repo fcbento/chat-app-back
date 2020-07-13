@@ -1,0 +1,113 @@
+---
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Chat app"
+host: "localhost:30"
+basePath: "/api/v1"
+tags:
+- name: "user"
+schemes:
+- "http"
+paths:
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Create user new user"
+      description: "This can be done without authentication"
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "User"
+  /users:
+    get:
+      tags:
+      - "user"
+      summary: "Gets lits of users"
+      description: "This can be done without authentication"
+      operationId: "getUsers"
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "Successful operation"
+      x-swagger-router-controller: "User"
+      
+  /user/login:
+    post:
+      tags:
+      - "user"
+      summary: "Logs user into the system and returns a token"
+      description: "Returns a token"
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/UserLogin"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "User"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  User:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      name:
+        type: "string"
+      lastName:
+        type: "string"
+      password:
+        type: "string"
+      email: 
+        type: "string"
+    xml:
+      name: "User"
+    example:
+      name: "Some name"
+      lastName: "Guy"
+      email: "email@example.com"
+      password: "123456789"
+  UserLogin:
+    type: "object"
+    properties:
+      email: 
+        type: "string"
+      password:
+        type: "string"
+    example:
+      email: "email@example.com"
+      password: "123456789"    
+      
+
+      

@@ -1,0 +1,7 @@
+{
+  "development": {
+    "PORT": 8080,
+    "MONGODB_URI": "mongodb://teste:teste123456@ds159776.mlab.com:59776/chat",
+    "JWT_SECRET": "pojiaj234oi234oij234oij4"
+  }
+}

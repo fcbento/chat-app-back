@@ -1,0 +1,33 @@
+{
+    "name": "chat-app",
+    "version": "0.0.2",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.18.3",
+        "core-js": "^2.5.4",
+        "express": "^4.16.3",
+        "express-history-api-fallback": "^2.2.1",
+        "js-yaml": "^3.14.0",
+        "jsonwebtoken": "^8.3.0",
+        "lodash": "^4.17.10",
+        "moment": "^2.22.2",
+        "mongodb": "^3.1.1",
+        "mongoose": "^5.2.2",
+        "socket.io": "^2.1.1",
+        "swagger-ui-express": "^4.1.4",
+        "validator": "^10.4.0",
+        "zone.js": "^0.8.26"
+    },
+    "devDependencies": {
+        "@types/node": "~8.9.4",
+        "codelyzer": "~4.2.1",
+        "expect": "^23.4.0",
+        "mocha": "^5.2.0",
+        "protractor": "~5.3.0",
+        "supertest": "^3.1.0",
+        "ts-node": "~5.0.1"
+    }
+}
