@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/user', async (req, res) => {
 
     try {
-        const body = _.pick(req.body, ['name', 'lastName', 'password', 'email', 'createdAt']);
+        const body = _.pick(req.body, ['name', 'email', 'password']);
         const user = new User(body);
         user.createdAt = Date.now();
         await user.save();
