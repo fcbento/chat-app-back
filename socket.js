@@ -21,16 +21,16 @@ const socketServer = (io, server) => {
         socket.on('join', (params, callback) => {
 
             const enterRoom = () => {
-                socket.join(params.room.name);
+                socket.join(params.room);
                 users.removeUser(socket.id);
-                users.addUser(socket.id, params.user, params.room.name);
-                io.to(params.room.name).emit('updateUserList', users.getUserList(params.room.name));
+                users.addUser(socket.id, params.user, params.room);
+                io.to(params.room).emit('updateUserList', users.getUserList(params.room));
                 socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
-                socket.broadcast.to(params.room.name).emit('newMessage', generateMessage('Admin', `${params.user.name} has joined`));
+                socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user} has joined`));
                 callback();
             };
 
-            if (!isRealString(params.user.name) || !isRealString(params.room.name)) {
+            if (!isRealString(params.user) || !isRealString(params.room)) {
                 return callback('Name and room name are required');
             }
 
