@@ -59,8 +59,9 @@ const socketServer = (io, server) => {
     const leaveRoom = (id) => {
         const user = users.removeUser(id);
         if (user) {
+            console.log(user)
             io.to(user.room).emit('updateUserList', users.getUserList(user.room));
-            io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.user.name} has left`));
+            io.to(user.room).emit('newMessage', generateMessage('Admin', `${user} has left`));
         }
     }
 }
