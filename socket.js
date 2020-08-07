@@ -23,14 +23,14 @@ const socketServer = (io, server) => {
             const enterRoom = () => {
                 socket.join(params.room);
                 users.removeUser(socket.id);
-                users.addUser(socket.id, params.user, params.room);
+                users.addUser(socket.id, params.user.name, params.room);
                 io.to(params.room).emit('updateUserList', users.getUserList(params.room));
                 socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
-                socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user} has joined`));
+                socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user.name} has joined`));
                 callback();
             };
 
-            if (!isRealString(params.user) || !isRealString(params.room)) {
+            if (!isRealString(params.user.name) || !isRealString(params.room)) {
                 return callback('Name and room name are required');
             }
 
