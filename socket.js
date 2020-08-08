@@ -61,7 +61,7 @@ const socketServer = (io, server) => {
         if (user) {
             console.log(user)
             io.to(user.room).emit('updateUserList', users.getUserList(user.room));
-            io.to(user.room).emit('newMessage', generateMessage('Admin', `${user} has left`));
+            io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.user} has left`));
         }
     }
 }
