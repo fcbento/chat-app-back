@@ -7,6 +7,21 @@ const users = new Users();
 
 const socketServer = (io, server) => {
 
+    const leaveRoom = (id) => {
+        const user = users.removeUser(id);
+        if (user) {
+            io.to(user.room).emit('updateUserList', users.getUserList(user.room));
+            io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.user} has left`));
+        }
+    }
+
+    const newUser = (id) => {
+        const user = users.newUser(id);
+         if (user) {
+            io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.user} has joined`));
+        }
+    }
+    
     io.on('connection', (socket) => {
 
         socket.on('disconnect', () => {
@@ -18,6 +33,11 @@ const socketServer = (io, server) => {
             leaveRoom(socket.id);
         });
 
+        socket.on('newUser', (callback) => {
+            callback('entering');
+            newUser(socket.id);
+        });
+
         socket.on('join', (params, callback) => {
 
             const enterRoom = () => {
@@ -25,8 +45,8 @@ const socketServer = (io, server) => {
                 users.removeUser(socket.id);
                 users.addUser(socket.id, params.user.name, params.room);
                 io.to(params.room).emit('updateUserList', users.getUserList(params.room));
-                io.to('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
-                io.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user.name} has joined`));
+                // io.to('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
+                // io.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user.name} has joined`));
                 callback();
             };
 
@@ -54,15 +74,7 @@ const socketServer = (io, server) => {
 
     const port = process.env.PORT || 1337;
     server.listen(port);
-    console.log('running on ' + port)
 
-    const leaveRoom = (id) => {
-        const user = users.removeUser(id);
-        if (user) {
-            io.to(user.room).emit('updateUserList', users.getUserList(user.room));
-            io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.user} has left`));
-        }
-    }
 }
 
 module.exports = { socketServer }

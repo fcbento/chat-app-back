@@ -5,9 +5,13 @@ class Users {
     }
 
     addUser(id, user, room) {
-        const users = this.getUserList(room);
         var user = { id, user, room };
         this.users.push(user);
+        return user;
+    }
+
+    newUser(id) {
+        var user = this.getUser(id);
         return user;
     }
 
