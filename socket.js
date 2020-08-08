@@ -25,8 +25,8 @@ const socketServer = (io, server) => {
                 users.removeUser(socket.id);
                 users.addUser(socket.id, params.user.name, params.room);
                 io.to(params.room).emit('updateUserList', users.getUserList(params.room));
-                socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
-                socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user.name} has joined`));
+                io.to('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
+                io.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user.name} has joined`));
                 callback();
             };
 
@@ -55,11 +55,10 @@ const socketServer = (io, server) => {
     const port = process.env.PORT || 1337;
     server.listen(port);
     console.log('running on ' + port)
-    
+
     const leaveRoom = (id) => {
         const user = users.removeUser(id);
         if (user) {
-            console.log(user)
             io.to(user.room).emit('updateUserList', users.getUserList(user.room));
             io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.user} has left`));
         }
