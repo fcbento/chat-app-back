@@ -23,20 +23,18 @@ const socketServer = (io, server) => {
             leaveRoom(socket.id);
         });
 
-        socket.on('leaveRoom', (callback) => {
-            callback('leaving');
+        socket.on('leaveRoom', () => {
             leaveRoom(socket.id);
         });
 
-        socket.on('createMessage', (message, callback) => {
+        socket.on('createMessage', (message) => {
             var user = users.getUser(socket.id);
             if (user && isRealString(message.text)) {
                 io.to(user.room).emit('newMessage', generateMessage(user, message.text));
             }
-            callback();
         });
 
-        socket.on('join', (params, callback) => {
+        socket.on('join', (params) => {
 
             const enterRoom = () => {
                 socket.join(params.room);
@@ -44,20 +42,19 @@ const socketServer = (io, server) => {
                 users.addUser(socket.id, params.user.name, params.room);
                 io.to(params.room).emit('updateUserList', users.getUserList(params.room));
                 io.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user.name} has joined`));
-                callback();
             };
 
             if (!isRealString(params.user.name) || !isRealString(params.room)) {
-                return callback('Name and room name are required');
+                return 'Name and room name are required';
             }
 
             if (users.getUserList(params.room).length === 0) {
                 return enterRoom();
             } else {
                 let user = users.getUserList(params.room)[0];
-       
+
                 if (user === params.user.name) {
-                    callback('Already in this room')
+                    return 'Already in this room'
                 } else {
                     enterRoom();
                 }
