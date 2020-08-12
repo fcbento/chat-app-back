@@ -8,20 +8,15 @@ const users = new Users();
 const socketServer = (io, server) => {
 
     const leaveRoom = (id) => {
+
         const user = users.removeUser(id);
+
         if (user) {
             io.to(user.room).emit('updateUserList', users.getUserList(user.room));
             io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.user} has left`));
         }
     }
 
-    const newUser = (id) => {
-        const user = users.newUser(id);
-         if (user) {
-            io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.user} has joined`));
-        }
-    }
-    
     io.on('connection', (socket) => {
 
         socket.on('disconnect', () => {
@@ -33,9 +28,12 @@ const socketServer = (io, server) => {
             leaveRoom(socket.id);
         });
 
-        socket.on('newUser', (callback) => {
-            callback('entering');
-            newUser(socket.id);
+        socket.on('createMessage', (message, callback) => {
+            var user = users.getUser(socket.id);
+            if (user && isRealString(message.text)) {
+                io.to(user.room).emit('newMessage', generateMessage(user, message.text));
+            }
+            callback();
         });
 
         socket.on('join', (params, callback) => {
@@ -45,8 +43,7 @@ const socketServer = (io, server) => {
                 users.removeUser(socket.id);
                 users.addUser(socket.id, params.user.name, params.room);
                 io.to(params.room).emit('updateUserList', users.getUserList(params.room));
-                // io.to('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
-                // io.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user.name} has joined`));
+                io.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user.name} has joined`));
                 callback();
             };
 
@@ -54,22 +51,19 @@ const socketServer = (io, server) => {
                 return callback('Name and room name are required');
             }
 
-            if (users.users.length === 0) {
+            if (users.getUserList(params.room).length === 0) {
                 return enterRoom();
             } else {
-                users.users.forEach((user) => {
-                    params.user._id === user.user._id ? callback('Already in this room') : enterRoom();
-                });
+                let user = users.getUserList(params.room)[0];
+       
+                if (user === params.user.name) {
+                    callback('Already in this room')
+                } else {
+                    enterRoom();
+                }
             }
         });
 
-        socket.on('createMessage', (message, callback) => {
-            var user = users.getUser(socket.id);
-            if (user && isRealString(message.text)) {
-                io.to(user.room).emit('newMessage', generateMessage(user, message.text));
-            }
-            callback();
-        });
     });
 
     const port = process.env.PORT || 1337;

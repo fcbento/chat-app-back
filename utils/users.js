@@ -10,11 +10,6 @@ class Users {
         return user;
     }
 
-    newUser(id) {
-        var user = this.getUser(id);
-        return user;
-    }
-
     removeUser(id) {
         var user = this.getUser(id);
 
