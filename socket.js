@@ -49,15 +49,11 @@ const socketServer = (io, server) => {
             }
 
             if (users.getUserList(params.room).length === 0) {
-                return enterRoom();
+                enterRoom();
+            } else if (users.getUserList(params.room)[0] === params.user.name) {
+                return 'Already in this room'
             } else {
-                let user = users.getUserList(params.room)[0];
-
-                if (user === params.user.name) {
-                    return 'Already in this room'
-                } else {
-                    enterRoom();
-                }
+                enterRoom();
             }
         });
 
