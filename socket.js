@@ -30,7 +30,7 @@ const socketServer = (io, server) => {
         socket.on('createMessage', (message) => {
             var user = users.getUser(socket.id);
             if (user && isRealString(message.text)) {
-                io.to(user.room).emit('newMessage', generateMessage(user, message.text));
+                io.to(user.room).emit('newMessage', generateMessage(user, message.text, message.isYoutube));
             }
         });
 

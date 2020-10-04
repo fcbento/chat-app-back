@@ -1,10 +1,11 @@
 const moment = require('moment');
 
-const generateMessage = (from, text) => {
+const generateMessage = (from, text, isYoutube) => {
     return {
         from,
         text,
-        createdAt: moment().valueOf()
+        createdAt: moment().valueOf(),
+        isYoutube
     };
 };
 
