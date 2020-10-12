@@ -39,8 +39,6 @@ const socketServer = (io, server) => {
             if (user && isRealString(message.text) && message.isAudio) {
                 let uploadLocation = __dirname + '/public/uploads/' + message.text.split('/')[3] + '.wav'
                 fs.appendFileSync(uploadLocation, Buffer.from(new Uint8Array(message.audioFile)));
-                let location = uploadLocation.split('/')
-                //message.text = `/${location[1]}/${location[2]}/${location[3]}`
                 message.text = uploadLocation
                 io.to(user.room).emit('newMessage', generateMessage(user, message.text, message.isYoutube, message.isAudio));
             }
