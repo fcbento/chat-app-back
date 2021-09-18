@@ -43,6 +43,12 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         required: false,
     },
+
+    avatar: {
+        type: String,
+        required: false,
+    },
+
     tokens: [{
         access: {
             type: String,
@@ -59,7 +65,7 @@ UserSchema.methods.toJSON = function () {
     var user = this;
     var userObject = user.toObject();
 
-    return _.pick(userObject, ['_id', 'email', 'name', 'lastName', 'createdAt']);
+    return _.pick(userObject, ['_id', 'email', 'name', 'lastName', 'createdAt', 'avatar']);
 };
 
 UserSchema.pre('save', function (next) {

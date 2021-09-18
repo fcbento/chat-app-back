@@ -37,7 +37,7 @@ const socketServer = (io, server) => {
             }
 
             if (user && isRealString(message.text) && message.isAudio) {
-                let uploadLocation = __dirname + '/public/uploads/' + message.text.split('/')[3] + '.wav'
+                let uploadLocation = __dirname + '/public/audios/' + message.text.split('/')[3] + '.wav'
                 fs.appendFileSync(uploadLocation, Buffer.from(new Uint8Array(message.audioFile)));
                 message.text = uploadLocation
                 io.to(user.room).emit('newMessage', generateMessage(user, message.text, message.isYoutube, message.isAudio));
@@ -48,8 +48,8 @@ const socketServer = (io, server) => {
 
             const enterRoom = () => {
                 socket.join(params.room);
-                users.removeUser(socket.id);
-                users.addUser(socket.id, params.user.name, params.room);
+                //users.removeUser(socket.id);
+                users.addUser(socket.id, params.user, params.room);
                 io.to(params.room).emit('updateUserList', users.getUserList(params.room));
                 io.to(params.room).emit('newMessage', generateMessage('Admin', `${params.user.name} has joined`));
             };

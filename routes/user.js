@@ -23,6 +23,22 @@ router.post('/user', async (req, res) => {
 
 });
 
+router.put('/user/:id', async (req, res) => {
+
+    const id = req.params.id;
+
+    const user = await User.findById(id);
+
+    user.avatar = req.body.avatar;
+    
+    User.findByIdAndUpdate(user._id, { $set: user }, { new: true }).then((userRes) => {
+        res.send(userRes);
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+
+});
+
 let handleError = (message, req) => {
 
     if (message.includes(req.body.email) && req.body.email)
@@ -39,10 +55,10 @@ let handleError = (message, req) => {
 }
 
 // All users
-router.get('/users', async (req, res) => {
+router.get('/users/:name', async (req, res) => {
     try {
-        const users = await User.find();
-        res.send({ users })
+        const users = await User.find({name : { $regex: req.params.name, $options: "i" }});
+        res.send(users)
     } catch (e) {
         res.status(400).send(e);
     }
@@ -73,6 +89,7 @@ router.post('/user/login', async (req, res) => {
     try {
         const body = _.pick(req.body, ['email', 'password']);
         const user = await User.findByCredentials(body.email, body.password);
+        user.isOnline = true;
         const token = await user.generateAuthToken();
         res.header('auth', token).send({ token, user });
     } catch (e) {
